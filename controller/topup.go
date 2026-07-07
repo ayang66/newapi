@@ -186,6 +186,30 @@ func getMinTopup() int64 {
 	return int64(minTopup)
 }
 
+func calculateEpayQuotaFromActualMoney(orderAmount int64, expectedMoney float64, actualMoneyValue string) (int, decimal.Decimal, decimal.Decimal, error) {
+	actualMoney, err := decimal.NewFromString(actualMoneyValue)
+	if err != nil {
+		return 0, decimal.Zero, decimal.Zero, err
+	}
+	if !actualMoney.IsPositive() {
+		return 0, decimal.Zero, actualMoney, fmt.Errorf("actual money must be positive")
+	}
+
+	expectedMoneyDecimal := decimal.NewFromFloat(expectedMoney)
+	if !expectedMoneyDecimal.IsPositive() {
+		return 0, decimal.Zero, actualMoney, fmt.Errorf("expected money must be positive")
+	}
+
+	dQuotaPerUnit := decimal.NewFromFloat(common.QuotaPerUnit)
+	creditedAmount := decimal.NewFromInt(orderAmount).Mul(actualMoney).Div(expectedMoneyDecimal)
+	quotaToAdd := int(creditedAmount.Mul(dQuotaPerUnit).IntPart())
+	if quotaToAdd <= 0 {
+		return 0, creditedAmount, actualMoney, fmt.Errorf("credited quota must be positive")
+	}
+
+	return quotaToAdd, creditedAmount, actualMoney, nil
+}
+
 func RequestEpay(c *gin.Context) {
 	var req EpayRequest
 	err := c.ShouldBindJSON(&req)
@@ -387,23 +411,25 @@ func EpayNotify(c *gin.Context) {
 				logger.LogInfo(c.Request.Context(), fmt.Sprintf("易支付 实际支付方式与订单不同 trade_no=%s order_payment_method=%s actual_type=%s client_ip=%s", verifyInfo.ServiceTradeNo, topUp.PaymentMethod, verifyInfo.Type, c.ClientIP()))
 				topUp.PaymentMethod = verifyInfo.Type
 			}
+			expectedMoney := decimal.NewFromFloat(topUp.Money)
+			quotaToAdd, creditedAmount, actualMoney, err := calculateEpayQuotaFromActualMoney(topUp.Amount, topUp.Money, verifyInfo.Money)
+			if err != nil {
+				logger.LogWarn(c.Request.Context(), fmt.Sprintf("易支付 实付金额对应额度无效 trade_no=%s user_id=%d expected_money=%.2f actual_money=%q client_ip=%s error=%q verify_info=%q topup=%q", topUp.TradeNo, topUp.UserId, topUp.Money, verifyInfo.Money, c.ClientIP(), err.Error(), common.GetJsonString(verifyInfo), common.GetJsonString(topUp)))
+				return
+			}
+			topUp.Money = actualMoney.InexactFloat64()
 			topUp.Status = common.TopUpStatusSuccess
-			err := topUp.Update()
+			err = topUp.Update()
 			if err != nil {
 				logger.LogError(c.Request.Context(), fmt.Sprintf("易支付 更新充值订单失败 trade_no=%s user_id=%d client_ip=%s error=%q topup=%q", topUp.TradeNo, topUp.UserId, c.ClientIP(), err.Error(), common.GetJsonString(topUp)))
 				return
 			}
-			//user, _ := model.GetUserById(topUp.UserId, false)
-			//user.Quota += topUp.Amount * 500000
-			dAmount := decimal.NewFromInt(int64(topUp.Amount))
-			dQuotaPerUnit := decimal.NewFromFloat(common.QuotaPerUnit)
-			quotaToAdd := int(dAmount.Mul(dQuotaPerUnit).IntPart())
 			err = model.IncreaseUserQuota(topUp.UserId, quotaToAdd, true)
 			if err != nil {
 				logger.LogError(c.Request.Context(), fmt.Sprintf("易支付 更新用户额度失败 trade_no=%s user_id=%d client_ip=%s quota_to_add=%d error=%q topup=%q", topUp.TradeNo, topUp.UserId, c.ClientIP(), quotaToAdd, err.Error(), common.GetJsonString(topUp)))
 				return
 			}
-			logger.LogInfo(c.Request.Context(), fmt.Sprintf("易支付 充值成功 trade_no=%s user_id=%d client_ip=%s quota_to_add=%d money=%.2f topup=%q", topUp.TradeNo, topUp.UserId, c.ClientIP(), quotaToAdd, topUp.Money, common.GetJsonString(topUp)))
+			logger.LogInfo(c.Request.Context(), fmt.Sprintf("易支付 充值成功 trade_no=%s user_id=%d client_ip=%s quota_to_add=%d expected_money=%s actual_money=%s credited_amount=%s topup=%q", topUp.TradeNo, topUp.UserId, c.ClientIP(), quotaToAdd, expectedMoney.StringFixed(2), actualMoney.StringFixed(2), creditedAmount.String(), common.GetJsonString(topUp)))
 			model.RecordTopupLog(topUp.UserId, fmt.Sprintf("使用在线充值成功，充值金额: %v，支付金额：%f", logger.LogQuota(quotaToAdd), topUp.Money), c.ClientIP(), topUp.PaymentMethod, "epay")
 		}
 	} else {
