@@ -1,0 +1,38 @@
+services:
+  new-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: new-api-local:source
+    container_name: new-api-local
+    restart: unless-stopped
+    command: --log-dir /app/logs
+    ports:
+      - "${NEW_API_PORT:-3001}:3000"
+    volumes:
+      - ./data-local:/data
+      - ./logs-local:/app/logs
+    environment:
+      SQL_DSN: ${SQL_DSN}
+      REDIS_CONN_STRING: redis://new-api-local-redis:6379
+      TZ: Asia/Shanghai
+      ERROR_LOG_ENABLED: "true"
+      BATCH_UPDATE_ENABLED: "true"
+      NODE_NAME: new-api-local
+      SESSION_SECRET: ${SESSION_SECRET}
+    depends_on:
+      redis:
+        condition: service_started
+    networks:
+      - new-api-local-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: new-api-local-redis
+    restart: unless-stopped
+    networks:
+      - new-api-local-network
+
+networks:
+  new-api-local-network:
+    driver: bridge

@@ -24,15 +24,9 @@ var PayMethods = []map[string]string{
 		"type": "alipay",
 	},
 	{
-		"name": "微信",
+		"name": "微信（推荐）",
 		"icon": "SiWechat",
 		"type": "wxpay",
-	},
-	{
-		"name":      "自定义1",
-		"icon":      "LuCreditCard",
-		"type":      "custom1",
-		"min_topup": "50",
 	},
 }
 
