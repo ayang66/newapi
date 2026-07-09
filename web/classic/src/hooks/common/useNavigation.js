@@ -26,12 +26,16 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
       home: true,
       console: true,
       pricing: true,
+      codexInstaller: true,
       docs: true,
       about: true,
     };
 
     // 使用传入的配置或默认配置
-    const modules = headerNavModules || defaultModules;
+    const modules = {
+      ...defaultModules,
+      ...(headerNavModules || {}),
+    };
 
     const allLinks = [
       {
@@ -48,6 +52,11 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
         text: t('模型广场'),
         itemKey: 'pricing',
         to: '/pricing',
+      },
+      {
+        text: t('Codex一键安装'),
+        itemKey: 'codexInstaller',
+        to: '/codex-installer',
       },
       ...(docsLink
         ? [
