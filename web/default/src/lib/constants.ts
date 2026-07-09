@@ -21,7 +21,7 @@ For commercial licensing, please contact support@quantumnous.com
  */
 
 // System Configuration Defaults
-export const DEFAULT_SYSTEM_NAME = 'New API'
+export const DEFAULT_SYSTEM_NAME = '哈基米中转站'
 export const DEFAULT_LOGO = '/logo.png'
 
 // LocalStorage Keys

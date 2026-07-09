@@ -200,12 +200,12 @@ const FooterBar = () => {
               {t('设计与开发由')}{' '}
             </span>
             <a
-              href='https://github.com/QuantumNous/new-api'
+              href='/'
               target='_blank'
               rel='noopener noreferrer'
               className='!text-semi-color-primary font-medium'
             >
-              New API
+              哈基米中转站
             </a>
           </div>
         </div>
@@ -232,12 +232,12 @@ const FooterBar = () => {
                 {t('设计与开发由')}{' '}
               </span>
               <a
-                href='https://github.com/QuantumNous/new-api'
+                href='/'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='!text-semi-color-primary font-medium'
               >
-                New API
+                哈基米中转站
               </a>
             </div>
           </div>

@@ -27,7 +27,7 @@ import {
 const defaultSiteSettings: SiteSettings = {
   'theme.frontend': 'default',
   Notice: '',
-  SystemName: 'New API',
+  SystemName: '哈基米中转站',
   Logo: '',
   Footer: '',
   About: '',
