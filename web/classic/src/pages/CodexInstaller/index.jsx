@@ -25,9 +25,14 @@ import {
   IconSetting,
   IconCode,
   IconBolt,
+  IconLink,
 } from '@douyinfe/semi-icons';
 
 const CODEX_MSI_URL = 'https://codexapp.agentsmirror.com/latest/win-x64';
+const CCSWITCH_MSI_URL =
+  'https://github.com/farion1231/cc-switch/releases/download/v3.16.5/CC-Switch-v3.16.5-Windows.msi';
+const CCSWITCH_RELEASE_URL =
+  'https://github.com/farion1231/cc-switch/releases/tag/v3.16.5';
 const DEFAULT_INSTALL_DIR = 'D:\\DevSoftWareTest\\codex';
 const DEFAULT_BASE_URL = 'https://brookeapi.cloud/v1';
 const DEFAULT_MODEL = 'gpt-5.5';
@@ -78,11 +83,12 @@ const CodexInstaller = () => {
           <div className='grid gap-7 lg:grid-cols-[1.2fr_0.8fr] lg:items-end'>
             <div>
               <h1 className='m-0 text-3xl font-bold leading-tight text-slate-950 dark:text-zinc-50 md:text-4xl'>
-                Codex 一键安装
+                Codex / CC Switch 一键安装
               </h1>
               <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-zinc-300'>
                 面向普通 Windows 用户的安装入口。安装器会下载 Codex
-                MSI，支持自定义安装目录，并写入哈基米中转站模型配置；需要时也可以启动本地
+                MSI，支持自定义安装目录，并写入哈基米中转站模型配置；同时提供 CC
+                Switch 官方 Windows 安装包入口。需要时也可以启动本地
                 <code className='mx-1 rounded bg-white/70 px-1.5 py-0.5 text-sm dark:bg-zinc-800'>
                   third\codex++
                 </code>
@@ -97,6 +103,15 @@ const CodexInstaller = () => {
                   onClick={() => window.open(CODEX_MSI_URL, '_blank')}
                 >
                   下载 Windows x64 安装包
+                </Button>
+                <Button
+                  theme='outline'
+                  type='primary'
+                  size='large'
+                  icon={<IconDownload />}
+                  onClick={() => window.open(CCSWITCH_MSI_URL, '_blank')}
+                >
+                  下载 CC Switch
                 </Button>
                 <Button
                   theme='outline'
@@ -117,6 +132,7 @@ const CodexInstaller = () => {
                 <InfoRow label='安装目录' value={DEFAULT_INSTALL_DIR} />
                 <InfoRow label='接口基址' value={DEFAULT_BASE_URL} />
                 <InfoRow label='默认模型' value={DEFAULT_MODEL} />
+                <InfoRow label='CC Switch' value='v3.16.5 Windows MSI' />
               </div>
             </div>
           </div>
@@ -138,6 +154,56 @@ const CodexInstaller = () => {
             title='写入模型配置'
             description='安装器支持填写模型供应商、Base URL、SK 密钥和模型名称，并生成 Codex 所需的 auth.json 与 config.toml。'
           />
+        </section>
+
+        <section className='mt-6 rounded-xl border border-semi-color-border bg-semi-color-bg-1 p-6 shadow-sm'>
+          <div className='mb-5 flex items-center gap-2'>
+            <IconLink className='text-emerald-600' />
+            <h2 className='m-0 text-xl font-semibold text-semi-color-text-0'>
+              CC Switch 一键安装
+            </h2>
+          </div>
+          <p className='mt-0 text-sm leading-6 text-semi-color-text-2'>
+            CC Switch 是一个用于管理 Codex、Claude Code、Gemini CLI
+            等开发工具配置的桌面客户端。本站接入官方 GitHub Release
+            下载地址，不使用第三方安装包。
+          </p>
+          <div className='mt-5 grid gap-4 lg:grid-cols-2'>
+            <div className='space-y-3'>
+              <InfoRow label='官方主页' value='https://ccswitch.io' />
+              <InfoRow label='官方仓库' value='farion1231/cc-switch' />
+              <InfoRow label='当前版本' value='v3.16.5' />
+              <InfoRow label='Windows 安装包' value='CC-Switch-v3.16.5-Windows.msi' />
+            </div>
+            <div className='flex flex-col justify-between gap-4 rounded-lg border border-semi-color-border bg-semi-color-bg-0 p-5'>
+              <div>
+                <h3 className='m-0 text-base font-semibold text-semi-color-text-0'>
+                  推荐给小白用户
+                </h3>
+                <p className='mb-0 mt-2 text-sm leading-6 text-semi-color-text-2'>
+                  用户可以先安装 Codex，再安装 CC Switch，用 CC Switch
+                  导入本站 API Key 和模型配置，减少手动编辑配置文件的步骤。
+                </p>
+              </div>
+              <div className='flex flex-col gap-3 sm:flex-row'>
+                <Button
+                  theme='solid'
+                  type='primary'
+                  icon={<IconDownload />}
+                  onClick={() => window.open(CCSWITCH_MSI_URL, '_blank')}
+                >
+                  下载 CC Switch MSI
+                </Button>
+                <Button
+                  theme='outline'
+                  type='tertiary'
+                  onClick={() => window.open(CCSWITCH_RELEASE_URL, '_blank')}
+                >
+                  查看官方 Release
+                </Button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className='mt-6 rounded-xl border border-semi-color-border bg-semi-color-bg-1 p-6 shadow-sm'>
