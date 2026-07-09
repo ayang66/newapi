@@ -51,6 +51,8 @@ const routerMap = {
   personal: '/console/personal',
 };
 
+const HIDE_CHAT_NAV_SECTION = true;
+
 const SiderBar = ({ onNavigate = () => {} }) => {
   const { t } = useTranslation();
   const [collapsed, toggleCollapsed] = useSidebarCollapsed();
@@ -444,7 +446,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           }}
         >
           {/* 聊天区域 */}
-          {hasSectionVisibleModules('chat') && (
+          {!HIDE_CHAT_NAV_SECTION && hasSectionVisibleModules('chat') && (
             <div className='sidebar-section'>
               {!collapsed && (
                 <div className='sidebar-group-label'>{t('聊天')}</div>
