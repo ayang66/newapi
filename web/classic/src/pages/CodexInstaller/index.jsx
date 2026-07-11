@@ -27,6 +27,7 @@ import {
   IconBolt,
   IconLink,
 } from '@douyinfe/semi-icons';
+import { copy, showError, showSuccess } from '../../helpers';
 
 const CODEX_MSI_URL = 'https://codexapp.agentsmirror.com/latest/win-x64';
 const CCSWITCH_MSI_URL =
@@ -43,6 +44,7 @@ const DEFAULT_MODEL = 'gpt-5.5';
 const DEFAULT_CLAUDE_BASE_URL = 'https://brookeapi.cloud';
 const DEFAULT_CLAUDE_OPUS_MODEL = 'claude-opus-4-7';
 const DEFAULT_CLAUDE_SONNET_MODEL = 'claude-sonnet-4-6';
+const CUSTOMER_WECHAT = '15137315710';
 
 const FeatureCard = ({ icon, title, description }) => (
   <div className='rounded-lg border border-semi-color-border bg-semi-color-bg-1 p-5 shadow-sm'>
@@ -79,6 +81,14 @@ const CodeBlock = ({ title, children }) => (
 );
 
 const CodexInstaller = () => {
+  const copyCustomerWechat = async () => {
+    if (await copy(CUSTOMER_WECHAT)) {
+      showSuccess('客服微信已复制');
+    } else {
+      showError('复制失败，请手动复制客服微信');
+    }
+  };
+
   return (
     <div className='classic-page-fill min-h-screen bg-semi-color-bg-0 px-4 pb-16 pt-[88px]'>
       <main className='mx-auto max-w-6xl'>
@@ -109,7 +119,7 @@ const CodexInstaller = () => {
                   icon={<IconDownload />}
                   onClick={() => window.open(CODEX_MSI_URL, '_blank')}
                 >
-                  下载 Windows x64 安装包
+                  一键安装 Codex
                 </Button>
                 <Button
                   theme='outline'
@@ -272,6 +282,17 @@ const CodexInstaller = () => {
               <p className='mb-0 mt-3'>
                 上游仓库当前没有发布独立
                 EXE/MSI，也没有声明标准开源许可证，因此本站只提供原仓库下载入口，不复制或二次分发作者脚本。
+              </p>
+              <p className='mb-0 mt-3'>
+                安装或配置遇到问题，可添加客服微信：
+                <button
+                  type='button'
+                  onClick={copyCustomerWechat}
+                  className='ml-1 border-0 bg-transparent p-0 font-semibold text-amber-950 underline decoration-dotted underline-offset-4 cursor-pointer dark:text-amber-100'
+                  title='复制客服微信'
+                >
+                  {CUSTOMER_WECHAT}
+                </button>
               </p>
             </div>
           </div>

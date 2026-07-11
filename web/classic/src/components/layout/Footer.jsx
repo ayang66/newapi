@@ -20,8 +20,44 @@ For commercial licensing, please contact support@quantumnous.com
 import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@douyinfe/semi-ui';
-import { getFooterHTML, getLogo, getSystemName } from '../../helpers';
+import { Copy, MessageCircle } from 'lucide-react';
+import {
+  copy,
+  getFooterHTML,
+  getLogo,
+  getSystemName,
+  showError,
+  showSuccess,
+} from '../../helpers';
 import { StatusContext } from '../../context/Status';
+
+const CUSTOMER_WECHAT = '15137315710';
+
+const CustomerService = () => {
+  const handleCopy = async () => {
+    if (await copy(CUSTOMER_WECHAT)) {
+      showSuccess('客服微信已复制');
+    } else {
+      showError('复制失败，请手动复制客服微信');
+    }
+  };
+
+  return (
+    <button
+      type='button'
+      onClick={handleCopy}
+      className='inline-flex items-center gap-2 border-0 bg-transparent p-0 text-sm !text-semi-color-text-1 hover:!text-semi-color-primary cursor-pointer'
+      title='复制客服微信'
+    >
+      <MessageCircle size={15} aria-hidden='true' />
+      <span>客服微信</span>
+      <span className='font-medium !text-semi-color-text-0'>
+        {CUSTOMER_WECHAT}
+      </span>
+      <Copy size={13} aria-hidden='true' />
+    </button>
+  );
+};
 
 const FooterBar = () => {
   const { t } = useTranslation();
@@ -195,6 +231,8 @@ const FooterBar = () => {
             </Typography.Text>
           </div>
 
+          <CustomerService />
+
           <div className='text-sm'>
             <span className='!text-semi-color-text-1'>
               {t('设计与开发由')}{' '}
@@ -227,6 +265,7 @@ const FooterBar = () => {
               className='custom-footer na-cb6feafeb3990c78 text-sm !text-semi-color-text-1'
               dangerouslySetInnerHTML={{ __html: footer }}
             ></div>
+            <CustomerService />
             <div className='text-sm flex-shrink-0'>
               <span className='!text-semi-color-text-1'>
                 {t('设计与开发由')}{' '}
