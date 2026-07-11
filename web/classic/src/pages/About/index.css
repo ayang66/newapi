@@ -1,0 +1,333 @@
+.hakimi-doc-page {
+  min-height: 100%;
+  color: var(--semi-color-text-0);
+  background: var(--semi-color-bg-0);
+}
+
+.hakimi-doc-hero {
+  border-bottom: 1px solid var(--semi-color-border);
+  background:
+    linear-gradient(120deg, rgba(0, 185, 107, 0.12), transparent 48%),
+    var(--semi-color-bg-1);
+}
+
+.hakimi-doc-hero-inner {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 56px 0 48px;
+}
+
+.hakimi-doc-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--semi-color-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hakimi-doc-hero h1 {
+  max-width: 860px;
+  margin: 0;
+  color: var(--semi-color-text-0);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.24;
+  letter-spacing: 0;
+}
+
+.hakimi-doc-hero p {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: var(--semi-color-text-2);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.hakimi-doc-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 820px);
+  gap: 54px;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 48px 0 80px;
+}
+
+.hakimi-doc-sidebar {
+  min-width: 0;
+}
+
+.hakimi-doc-sidebar-inner {
+  position: sticky;
+  top: 92px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding-right: 18px;
+  border-right: 1px solid var(--semi-color-border);
+}
+
+.hakimi-doc-sidebar-title {
+  margin-bottom: 10px;
+  color: var(--semi-color-text-0);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hakimi-doc-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hakimi-doc-sidebar a {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 7px 0;
+  color: var(--semi-color-text-2);
+  font-size: 13px;
+  line-height: 1.45;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.hakimi-doc-sidebar a svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+.hakimi-doc-sidebar a:hover {
+  color: var(--semi-color-primary);
+}
+
+.hakimi-doc-content {
+  min-width: 0;
+  color: var(--semi-color-text-1);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.hakimi-doc-content > :first-child {
+  margin-top: 0;
+}
+
+.hakimi-doc-content h2,
+.hakimi-doc-content h3,
+.hakimi-doc-content h4 {
+  scroll-margin-top: 96px;
+  color: var(--semi-color-text-0);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.hakimi-doc-content h2 {
+  margin: 56px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--semi-color-border);
+  font-size: 26px;
+  line-height: 1.35;
+}
+
+.hakimi-doc-content h3 {
+  margin: 36px 0 14px;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.hakimi-doc-content h4 {
+  margin: 28px 0 12px;
+  font-size: 17px;
+}
+
+.hakimi-doc-content p {
+  margin: 14px 0;
+}
+
+.hakimi-doc-content strong {
+  color: var(--semi-color-text-0);
+  font-weight: 650;
+}
+
+.hakimi-doc-content a {
+  color: var(--semi-color-primary);
+  text-decoration: none;
+}
+
+.hakimi-doc-content a:hover {
+  text-decoration: underline;
+}
+
+.hakimi-doc-content ul,
+.hakimi-doc-content ol {
+  margin: 14px 0;
+  padding-left: 26px;
+}
+
+.hakimi-doc-content ul {
+  list-style: disc;
+}
+
+.hakimi-doc-content ol {
+  list-style: decimal;
+}
+
+.hakimi-doc-content li {
+  margin: 7px 0;
+  padding-left: 3px;
+}
+
+.hakimi-doc-content code {
+  padding: 2px 6px;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 4px;
+  color: var(--semi-color-primary);
+  background: var(--semi-color-fill-0);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+}
+
+.hakimi-doc-content pre {
+  position: relative;
+  margin: 18px 0 24px;
+  padding: 20px 22px;
+  overflow-x: auto;
+  border: 1px solid var(--semi-color-border);
+  border-radius: 8px;
+  background: #15171c;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.hakimi-doc-content pre code {
+  display: block;
+  padding: 0;
+  border: 0;
+  color: #e7eaf0;
+  background: transparent;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.hakimi-doc-content table {
+  display: table;
+  width: 100%;
+  margin: 20px 0 28px;
+  overflow: hidden;
+  border: 1px solid var(--semi-color-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.hakimi-doc-content th,
+.hakimi-doc-content td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--semi-color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.hakimi-doc-content th {
+  color: var(--semi-color-text-0);
+  background: var(--semi-color-fill-0);
+  font-weight: 650;
+}
+
+.hakimi-doc-content tr:last-child td {
+  border-bottom: 0;
+}
+
+.hakimi-doc-content blockquote {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--semi-color-primary);
+  color: var(--semi-color-text-1);
+  background: rgba(0, 185, 107, 0.08);
+}
+
+.hakimi-doc-content blockquote p {
+  margin: 0;
+}
+
+.hakimi-doc-content hr {
+  margin: 40px 0;
+  border: 0;
+  border-top: 1px solid var(--semi-color-border);
+}
+
+@media (max-width: 900px) {
+  .hakimi-doc-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .hakimi-doc-sidebar-inner {
+    position: static;
+    max-height: none;
+    padding: 16px 18px;
+    border: 1px solid var(--semi-color-border);
+    border-radius: 6px;
+    background: var(--semi-color-bg-1);
+  }
+
+  .hakimi-doc-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hakimi-doc-hero-inner,
+  .hakimi-doc-layout {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .hakimi-doc-hero-inner {
+    padding: 36px 0 32px;
+  }
+
+  .hakimi-doc-hero h1 {
+    font-size: 28px;
+  }
+
+  .hakimi-doc-layout {
+    padding: 28px 0 56px;
+  }
+
+  .hakimi-doc-sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .hakimi-doc-content {
+    font-size: 15px;
+  }
+
+  .hakimi-doc-content h2 {
+    margin-top: 44px;
+    font-size: 22px;
+  }
+
+  .hakimi-doc-content h3 {
+    font-size: 18px;
+  }
+
+  .hakimi-doc-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .hakimi-doc-content pre {
+    margin-right: -14px;
+    margin-left: -14px;
+    padding: 18px 14px;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+  }
+}

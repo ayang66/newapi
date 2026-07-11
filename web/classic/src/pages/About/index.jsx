@@ -17,15 +17,47 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { API, showError } from '../../helpers';
 import { marked } from 'marked';
 import { Empty } from '@douyinfe/semi-ui';
+import { BookOpen, ChevronRight } from 'lucide-react';
 import {
   IllustrationConstruction,
   IllustrationConstructionDark,
 } from '@douyinfe/semi-illustrations';
 import { useTranslation } from 'react-i18next';
+import './index.css';
+
+const prepareDocument = (html) => {
+  if (!html || typeof DOMParser === 'undefined') {
+    return { title: '', content: html, sections: [] };
+  }
+
+  const parsed = new DOMParser().parseFromString(html, 'text/html');
+  const titleElement = parsed.body.querySelector('h1');
+  const title = titleElement?.textContent?.trim() || '';
+
+  if (titleElement) {
+    titleElement.remove();
+  }
+
+  const sections = Array.from(parsed.body.querySelectorAll('h2')).map(
+    (heading, index) => {
+      const sectionTitle =
+        heading.textContent?.trim() || `Section ${index + 1}`;
+      const id = `document-section-${index + 1}`;
+      heading.id = id;
+      return { id, title: sectionTitle };
+    },
+  );
+
+  return {
+    title,
+    content: parsed.body.innerHTML,
+    sections,
+  };
+};
 
 const About = () => {
   const { t } = useTranslation();
@@ -54,6 +86,12 @@ const About = () => {
   useEffect(() => {
     displayAbout().then();
   }, []);
+
+  const isExternalPage = about.trim().startsWith('https://');
+  const document = useMemo(
+    () => (isExternalPage ? null : prepareDocument(about)),
+    [about, isExternalPage],
+  );
 
   const emptyStyle = {
     padding: '24px',
@@ -133,7 +171,7 @@ const About = () => {
   );
 
   return (
-    <div className='classic-page-fill flex flex-col pt-[60px] px-2'>
+    <div className='classic-page-fill flex flex-col pt-[60px]'>
       {aboutLoaded && about === '' ? (
         <div className='flex flex-1 justify-center items-center p-8'>
           <Empty
@@ -153,7 +191,7 @@ const About = () => {
         </div>
       ) : (
         <>
-          {about.startsWith('https://') ? (
+          {isExternalPage ? (
             <iframe
               src={about}
               style={{
@@ -164,10 +202,44 @@ const About = () => {
               }}
             />
           ) : (
-            <div
-              style={{ fontSize: 'larger' }}
-              dangerouslySetInnerHTML={{ __html: about }}
-            ></div>
+            <div className='hakimi-doc-page'>
+              <header className='hakimi-doc-hero'>
+                <div className='hakimi-doc-hero-inner'>
+                  <div className='hakimi-doc-kicker'>
+                    <BookOpen size={16} aria-hidden='true' />
+                    <span>哈基米中转站使用文档</span>
+                  </div>
+                  <h1>{document?.title || '接入与使用指南'}</h1>
+                  <p>
+                    从创建 API Key 到完成 Codex
+                    配置，按照章节逐步操作即可开始使用。
+                  </p>
+                </div>
+              </header>
+
+              <div className='hakimi-doc-layout'>
+                {document?.sections?.length > 0 && (
+                  <aside className='hakimi-doc-sidebar' aria-label='文档目录'>
+                    <div className='hakimi-doc-sidebar-inner'>
+                      <div className='hakimi-doc-sidebar-title'>本文目录</div>
+                      <nav>
+                        {document.sections.map((section) => (
+                          <a key={section.id} href={`#${section.id}`}>
+                            <ChevronRight size={14} aria-hidden='true' />
+                            <span>{section.title}</span>
+                          </a>
+                        ))}
+                      </nav>
+                    </div>
+                  </aside>
+                )}
+
+                <main
+                  className='hakimi-doc-content'
+                  dangerouslySetInnerHTML={{ __html: document?.content || '' }}
+                />
+              </div>
+            </div>
           )}
         </>
       )}
