@@ -28,7 +28,9 @@ import {
 } from '@douyinfe/semi-ui';
 import {
   API,
+  copy,
   showError,
+  showSuccess,
   getModelCategories,
   selectFilter,
 } from '../../../helpers';
@@ -42,6 +44,24 @@ import CCSwitchModal from './modals/CCSwitchModal';
 import { useTokensData } from '../../../hooks/tokens/useTokensData';
 import { useIsMobile } from '../../../hooks/common/useIsMobile';
 import { createCardProPagination } from '../../../helpers/utils';
+import { Copy } from 'lucide-react';
+
+const buildApiBaseUrl = (address) => {
+  const normalized = (address || window.location.origin || '').replace(
+    /\/+$/,
+    '',
+  );
+  return `${normalized}/v1`;
+};
+
+const getInitialApiBaseUrl = () => {
+  try {
+    const status = JSON.parse(localStorage.getItem('status') || '{}');
+    return buildApiBaseUrl(status.server_address);
+  } catch (_) {
+    return buildApiBaseUrl('');
+  }
+};
 
 function TokensPage() {
   // Define the function first, then pass it into the hook to avoid TDZ errors
@@ -66,6 +86,26 @@ function TokensPage() {
   const [prefillKey, setPrefillKey] = useState('');
   const [ccSwitchVisible, setCCSwitchVisible] = useState(false);
   const [ccSwitchKey, setCCSwitchKey] = useState('');
+  const [apiBaseUrl, setApiBaseUrl] = useState(getInitialApiBaseUrl);
+
+  useEffect(() => {
+    API.get('/api/status')
+      .then((res) => {
+        const serverAddress = res?.data?.data?.server_address;
+        if (serverAddress) {
+          setApiBaseUrl(buildApiBaseUrl(serverAddress));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const copyApiBaseUrl = async () => {
+    if (await copy(apiBaseUrl)) {
+      showSuccess(tokensData.t('API地址已复制'));
+    } else {
+      showError(tokensData.t('复制失败，请手动复制'));
+    }
+  };
 
   // Keep latest data for handlers inside notifications
   useEffect(() => {
@@ -390,6 +430,26 @@ function TokensPage() {
         tokenKey={ccSwitchKey}
         modelOptions={modelOptions}
       />
+
+      <div className='mb-3 flex flex-col gap-2 rounded-lg border border-blue-100 bg-blue-50/70 px-4 py-3 md:flex-row md:items-center md:justify-between'>
+        <div className='min-w-0'>
+          <div className='text-sm font-medium text-slate-800'>
+            {tokensData.t('API Base URL')}
+          </div>
+          <div className='mt-1 break-all font-mono text-sm text-blue-700'>
+            {apiBaseUrl}
+          </div>
+        </div>
+        <Button
+          theme='solid'
+          type='primary'
+          icon={<Copy size={16} />}
+          onClick={copyApiBaseUrl}
+          className='w-full md:w-auto'
+        >
+          {tokensData.t('复制')}
+        </Button>
+      </div>
 
       <CardPro
         type='type1'
