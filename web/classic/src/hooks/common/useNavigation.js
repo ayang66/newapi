@@ -54,7 +54,7 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
         to: '/pricing',
       },
       {
-        text: t('Codex一键安装'),
+        text: t('AI工具安装'),
         itemKey: 'codexInstaller',
         to: '/codex-installer',
       },

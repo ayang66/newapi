@@ -201,7 +201,7 @@ export default function SettingsHeaderNavModules(props) {
     },
     {
       key: 'codexInstaller',
-      title: t('Codex一键安装'),
+      title: t('AI工具安装'),
       description: t('Windows 桌面安装与配置入口'),
     },
     {

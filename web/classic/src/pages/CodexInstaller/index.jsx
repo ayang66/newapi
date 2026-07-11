@@ -33,9 +33,16 @@ const CCSWITCH_MSI_URL =
   'https://github.com/farion1231/cc-switch/releases/download/v3.16.5/CC-Switch-v3.16.5-Windows.msi';
 const CCSWITCH_RELEASE_URL =
   'https://github.com/farion1231/cc-switch/releases/tag/v3.16.5';
+const CLAUDE_INSTALLER_REPO_URL =
+  'https://github.com/lxistired/claude-code-cn-installer';
+const CLAUDE_INSTALLER_ZIP_URL =
+  'https://github.com/lxistired/claude-code-cn-installer/archive/refs/heads/main.zip';
 const DEFAULT_INSTALL_DIR = 'D:\\DevSoftWareTest\\codex';
 const DEFAULT_BASE_URL = 'https://brookeapi.cloud/v1';
 const DEFAULT_MODEL = 'gpt-5.5';
+const DEFAULT_CLAUDE_BASE_URL = 'https://brookeapi.cloud';
+const DEFAULT_CLAUDE_OPUS_MODEL = 'claude-opus-4-7';
+const DEFAULT_CLAUDE_SONNET_MODEL = 'claude-sonnet-4-6';
 
 const FeatureCard = ({ icon, title, description }) => (
   <div className='rounded-lg border border-semi-color-border bg-semi-color-bg-1 p-5 shadow-sm'>
@@ -83,12 +90,12 @@ const CodexInstaller = () => {
           <div className='grid gap-7 lg:grid-cols-[1.2fr_0.8fr] lg:items-end'>
             <div>
               <h1 className='m-0 text-3xl font-bold leading-tight text-slate-950 dark:text-zinc-50 md:text-4xl'>
-                Codex / CC Switch 一键安装
+                AI 编程工具一键安装
               </h1>
               <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-zinc-300'>
-                面向普通 Windows 用户的安装入口。安装器会下载 Codex
-                MSI，支持自定义安装目录，并写入哈基米中转站模型配置；同时提供 CC
-                Switch 官方 Windows 安装包入口。需要时也可以启动本地
+                面向普通 Windows 用户的安装入口。这里集中提供 Codex、Claude Code
+                和 CC Switch 的安装方式，并给出哈基米中转站对应的模型配置。Codex
+                安装器支持自定义目录，需要时也可以启动本地
                 <code className='mx-1 rounded bg-white/70 px-1.5 py-0.5 text-sm dark:bg-zinc-800'>
                   third\codex++
                 </code>
@@ -103,6 +110,17 @@ const CodexInstaller = () => {
                   onClick={() => window.open(CODEX_MSI_URL, '_blank')}
                 >
                   下载 Windows x64 安装包
+                </Button>
+                <Button
+                  theme='outline'
+                  type='primary'
+                  size='large'
+                  icon={<IconDownload />}
+                  onClick={() =>
+                    window.open(CLAUDE_INSTALLER_ZIP_URL, '_blank')
+                  }
+                >
+                  下载 Claude Code 安装工具
                 </Button>
                 <Button
                   theme='outline'
@@ -132,6 +150,7 @@ const CodexInstaller = () => {
                 <InfoRow label='安装目录' value={DEFAULT_INSTALL_DIR} />
                 <InfoRow label='接口基址' value={DEFAULT_BASE_URL} />
                 <InfoRow label='默认模型' value={DEFAULT_MODEL} />
+                <InfoRow label='Claude Code' value='Windows 中文安装脚本' />
                 <InfoRow label='CC Switch' value='v3.16.5 Windows MSI' />
               </div>
             </div>
@@ -158,6 +177,108 @@ const CodexInstaller = () => {
 
         <section className='mt-6 rounded-xl border border-semi-color-border bg-semi-color-bg-1 p-6 shadow-sm'>
           <div className='mb-5 flex items-center gap-2'>
+            <IconCode className='text-emerald-600' />
+            <h2 className='m-0 text-xl font-semibold text-semi-color-text-0'>
+              Claude Code 一键安装
+            </h2>
+          </div>
+          <p className='mt-0 text-sm leading-6 text-semi-color-text-2'>
+            本站接入
+            <a
+              className='mx-1 text-semi-color-primary hover:underline'
+              href={CLAUDE_INSTALLER_REPO_URL}
+              target='_blank'
+              rel='noreferrer'
+            >
+              lxistired/claude-code-cn-installer
+            </a>
+            的原始项目下载地址。该工具会自动检查并安装 Node.js、Git、Claude
+            Code，并提供自定义 Anthropic 兼容 API 配置入口。
+          </p>
+
+          <div className='mt-5 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]'>
+            <div className='space-y-3'>
+              <InfoRow label='系统要求' value='Windows 10 或更高版本' />
+              <InfoRow label='接口基址' value={DEFAULT_CLAUDE_BASE_URL} />
+              <InfoRow label='请求接口' value='/v1/messages' />
+              <InfoRow label='Opus 模型' value={DEFAULT_CLAUDE_OPUS_MODEL} />
+              <InfoRow
+                label='Sonnet 模型'
+                value={DEFAULT_CLAUDE_SONNET_MODEL}
+              />
+            </div>
+
+            <div className='rounded-lg border border-semi-color-border bg-semi-color-bg-0 p-5'>
+              <h3 className='m-0 text-base font-semibold text-semi-color-text-0'>
+                安装与配置步骤
+              </h3>
+              <ol className='mb-0 mt-3 space-y-2 pl-5 text-sm leading-6 text-semi-color-text-2'>
+                <li>下载并解压项目 ZIP，以管理员身份运行“一键安装.bat”。</li>
+                <li>安装脚本询问智谱模型时选择“暂时跳过”。</li>
+                <li>
+                  安装完成后运行“配置API.bat”，选择菜单 4“自定义 Anthropic 兼容
+                  API”。
+                </li>
+                <li>Base URL 填写本站地址，API Key 填写自己创建的令牌。</li>
+                <li>按照下方推荐值填写 Opus、Sonnet 和 Haiku 模型名称。</li>
+              </ol>
+              <div className='mt-5 flex flex-col gap-3 sm:flex-row'>
+                <Button
+                  theme='solid'
+                  type='primary'
+                  icon={<IconDownload />}
+                  onClick={() =>
+                    window.open(CLAUDE_INSTALLER_ZIP_URL, '_blank')
+                  }
+                >
+                  下载项目 ZIP
+                </Button>
+                <Button
+                  theme='outline'
+                  type='tertiary'
+                  icon={<IconLink />}
+                  onClick={() =>
+                    window.open(CLAUDE_INSTALLER_REPO_URL, '_blank')
+                  }
+                >
+                  查看原项目
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className='mt-5 grid gap-4 lg:grid-cols-2'>
+            <CodeBlock title='.claude/settings.json 推荐配置'>
+              {`{
+  "env": {
+    "ANTHROPIC_BASE_URL": "${DEFAULT_CLAUDE_BASE_URL}",
+    "ANTHROPIC_API_KEY": "sk-xxx",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "${DEFAULT_CLAUDE_OPUS_MODEL}",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "${DEFAULT_CLAUDE_SONNET_MODEL}",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "${DEFAULT_CLAUDE_SONNET_MODEL}"
+  }
+}`}
+            </CodeBlock>
+            <div className='rounded-lg border border-amber-300 bg-amber-50 p-5 text-sm leading-6 text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100'>
+              <h3 className='m-0 text-base font-semibold'>使用前确认</h3>
+              <p className='mb-0 mt-2'>
+                Claude Code 使用 Anthropic Messages 协议。本站必须存在支持
+                <code className='mx-1 rounded bg-white/70 px-1.5 py-0.5 dark:bg-zinc-900/60'>
+                  /v1/messages
+                </code>
+                的 Claude 渠道，并且令牌所在分组可以访问所填模型。Codex
+                渠道本身不支持这个接口；模型调整后请以模型广场显示的名称为准。
+              </p>
+              <p className='mb-0 mt-3'>
+                上游仓库当前没有发布独立
+                EXE/MSI，也没有声明标准开源许可证，因此本站只提供原仓库下载入口，不复制或二次分发作者脚本。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className='mt-6 rounded-xl border border-semi-color-border bg-semi-color-bg-1 p-6 shadow-sm'>
+          <div className='mb-5 flex items-center gap-2'>
             <IconLink className='text-emerald-600' />
             <h2 className='m-0 text-xl font-semibold text-semi-color-text-0'>
               CC Switch 一键安装
@@ -173,7 +294,10 @@ const CodexInstaller = () => {
               <InfoRow label='官方主页' value='https://ccswitch.io' />
               <InfoRow label='官方仓库' value='farion1231/cc-switch' />
               <InfoRow label='当前版本' value='v3.16.5' />
-              <InfoRow label='Windows 安装包' value='CC-Switch-v3.16.5-Windows.msi' />
+              <InfoRow
+                label='Windows 安装包'
+                value='CC-Switch-v3.16.5-Windows.msi'
+              />
             </div>
             <div className='flex flex-col justify-between gap-4 rounded-lg border border-semi-color-border bg-semi-color-bg-0 p-5'>
               <div>
@@ -181,8 +305,8 @@ const CodexInstaller = () => {
                   推荐给小白用户
                 </h3>
                 <p className='mb-0 mt-2 text-sm leading-6 text-semi-color-text-2'>
-                  用户可以先安装 Codex，再安装 CC Switch，用 CC Switch
-                  导入本站 API Key 和模型配置，减少手动编辑配置文件的步骤。
+                  用户可以先安装 Codex，再安装 CC Switch，用 CC Switch 导入本站
+                  API Key 和模型配置，减少手动编辑配置文件的步骤。
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:flex-row'>
