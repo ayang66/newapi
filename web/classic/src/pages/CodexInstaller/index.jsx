@@ -293,6 +293,7 @@ const CodexInstaller = () => {
                 >
                   {CUSTOMER_WECHAT}
                 </button>
+                <span className='ml-1 font-semibold'>，新客领五元额度</span>
               </p>
             </div>
           </div>

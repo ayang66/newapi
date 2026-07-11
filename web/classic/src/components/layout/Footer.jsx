@@ -33,7 +33,7 @@ import { StatusContext } from '../../context/Status';
 
 const CUSTOMER_WECHAT = '15137315710';
 
-const CustomerService = () => {
+const CustomerService = ({ floating = false }) => {
   const handleCopy = async () => {
     if (await copy(CUSTOMER_WECHAT)) {
       showSuccess('客服微信已复制');
@@ -46,13 +46,21 @@ const CustomerService = () => {
     <button
       type='button'
       onClick={handleCopy}
-      className='inline-flex items-center gap-2 border-0 bg-transparent p-0 text-sm !text-semi-color-text-1 hover:!text-semi-color-primary cursor-pointer'
+      className={
+        floating
+          ? 'fixed bottom-4 right-3 z-50 inline-flex max-w-[calc(100vw-24px)] items-center gap-2 rounded-lg border border-semi-color-border bg-semi-color-bg-1 px-4 py-3 text-sm !text-semi-color-text-1 shadow-lg hover:!text-semi-color-primary cursor-pointer sm:bottom-6 sm:right-6'
+          : 'inline-flex items-center gap-2 border-0 bg-transparent p-0 text-sm !text-semi-color-text-1 hover:!text-semi-color-primary cursor-pointer'
+      }
       title='复制客服微信'
+      aria-label='复制客服微信 15137315710，新客领五元额度'
     >
       <MessageCircle size={15} aria-hidden='true' />
       <span>客服微信</span>
       <span className='font-medium !text-semi-color-text-0'>
         {CUSTOMER_WECHAT}
+      </span>
+      <span className='hidden text-semi-color-primary sm:inline'>
+        新客领五元额度
       </span>
       <Copy size={13} aria-hidden='true' />
     </button>
@@ -258,6 +266,7 @@ const FooterBar = () => {
 
   return (
     <div className='w-full'>
+      <CustomerService floating />
       {footer ? (
         <footer className='relative h-auto py-4 px-6 md:px-24 w-full flex items-center justify-center overflow-hidden'>
           <div className='flex flex-col md:flex-row items-center justify-between w-full max-w-[1110px] gap-4'>
