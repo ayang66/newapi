@@ -211,7 +211,7 @@ const About = () => {
                   </div>
                   <h1>{document?.title || '接入与使用指南'}</h1>
                   <p>
-                    从创建 API Key 到完成 Codex
+                    从创建 API Key 到完成 Codex 或 Claude Code
                     配置，按照章节逐步操作即可开始使用。
                   </p>
                 </div>

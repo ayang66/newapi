@@ -1,13 +1,15 @@
-# 在 Codex 中接入哈基米中转站
+# Codex 与 Claude Code 接入哈基米中转站
 
-推荐使用 Codex 桌面客户端，或在 Cursor / VS Code 中安装 Codex 扩展使用。下面的配置会把 Codex 请求转发到哈基米中转站，用户只需要替换自己的 API Key 即可。
+本文介绍如何把 Codex 和 Claude Code 接入哈基米中转站。用户只需要在控制台创建自己的 API Key，再按照对应客户端的章节完成配置即可。
 
 ## 快速信息
 
 | 项目 | 内容 |
 |---|---|
 | 接口基址 | `https://brookeapi.cloud/v1` |
+| Claude Code 基址 | `https://brookeapi.cloud` |
 | 推荐模型 | `gpt-5.5` |
+| Claude 推荐模型 | `claude-opus-4-7` / `claude-sonnet-4-6` |
 | 认证方式 | 哈基米中转站 API Key |
 | 一键安装入口 | `https://brookeapi.cloud/codex-installer` |
 
@@ -125,7 +127,102 @@ https://brookeapi.cloud/codex-installer
 - CC Switch 官方 Windows MSI 下载入口
 - 哈基米中转站默认模型配置
 
-## 六、安装 Codex CLI
+## 六、Claude Code 一键安装与配置
+
+### 1. 下载 Windows 中文安装工具
+
+Windows 10 或更高版本用户可以使用下面的项目安装 Claude Code：
+
+```text
+https://github.com/lxistired/claude-code-cn-installer
+```
+
+项目 ZIP 下载地址：
+
+```text
+https://github.com/lxistired/claude-code-cn-installer/archive/refs/heads/main.zip
+```
+
+下载并解压后，右键 `一键安装.bat`，选择“以管理员身份运行”。安装工具会自动检查并安装 Node.js、Git 和 Claude Code。
+
+当安装脚本询问智谱模型时，选择“暂时跳过，稍后手动配置”。
+
+> 上游项目目前没有发布独立 EXE/MSI，也没有声明标准开源许可证。本站只提供原项目下载入口，不复制或二次分发作者脚本。
+
+### 2. 配置哈基米中转站
+
+安装完成后运行 `配置API.bat`，选择：
+
+```text
+[4] 配置自定义 Anthropic 兼容 API
+```
+
+按照提示填写：
+
+| 配置项 | 推荐值 |
+|---|---|
+| API Base URL | `https://brookeapi.cloud` |
+| API Key | 在哈基米中转站创建的 `sk-xxx` 令牌 |
+| Opus 模型 | `claude-opus-4-7` |
+| Sonnet 模型 | `claude-sonnet-4-6` |
+| Haiku 模型 | `claude-sonnet-4-6` |
+
+Claude Code 的 Base URL **不要添加 `/v1`**。客户端会自动请求：
+
+```text
+https://brookeapi.cloud/v1/messages
+```
+
+### 3. 完整 settings.json
+
+也可以手动创建或编辑：
+
+```text
+%USERPROFILE%\.claude\settings.json
+```
+
+完整内容如下，把 `sk-xxx` 替换成自己的 API Key：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://brookeapi.cloud",
+    "ANTHROPIC_API_KEY": "sk-xxx",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-4-7",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-6",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-sonnet-4-6"
+  }
+}
+```
+
+保存后关闭当前终端，重新打开 PowerShell 或 CMD。
+
+### 4. 启动并验证
+
+查看安装版本：
+
+```powershell
+claude --version
+```
+
+进入项目目录并启动：
+
+```powershell
+cd D:\你的项目目录
+claude
+```
+
+如果能够正常返回内容，并且哈基米中转站后台能看到 `/v1/messages` 调用日志，说明配置成功。
+
+### 5. 使用前确认
+
+- Claude Code 使用 Anthropic Messages 协议，对应接口为 `/v1/messages`。
+- 令牌所在分组必须能访问所填写的 Claude 模型。
+- Codex 渠道本身不支持 `/v1/messages`，需要使用支持 Claude/Anthropic 协议的渠道。
+- 如果后台调整了模型名称，请以模型广场当前显示的名称为准。
+- 安装或配置遇到问题，可添加客服微信 `15137315710`，新客可领取五元额度。
+
+## 七、安装 Codex CLI
 
 如果你想在终端中使用 Codex，可以安装 Codex CLI。
 
@@ -173,7 +270,7 @@ codex --version
 
 出现版本号即表示安装完成。
 
-## 七、安装 Node.js
+## 八、安装 Node.js
 
 Ubuntu / Debian：
 
@@ -202,7 +299,7 @@ node -v
 npm -v
 ```
 
-## 八、启动 Codex
+## 九、启动 Codex
 
 进入你的项目目录：
 
@@ -224,7 +321,7 @@ codex
 
 如果能够正常返回，并且哈基米中转站后台能看到调用记录，说明配置成功。
 
-## 九、常见命令参考
+## 十、常见命令参考
 
 | 命令 | 描述 |
 |---|---|
@@ -240,7 +337,7 @@ codex
 | `/mcp` | 查看 MCP 工具状态 |
 | `/quit` | 退出 Codex CLI |
 
-## 十、常见问题
+## 十一、常见问题
 
 ### 1. 找不到 `.codex` 文件夹
 
@@ -272,7 +369,7 @@ base_url = "https://brookeapi.cloud/v1"
 https://brookeapi.cloud/v1
 ```
 
-## 十一、官方参考
+## 十二、官方参考
 
 - [Codex 官方文档](https://developers.openai.com/codex)
 - [Codex 快速开始](https://developers.openai.com/codex/quickstart)
@@ -280,3 +377,4 @@ https://brookeapi.cloud/v1
 - [Codex 配置参考](https://developers.openai.com/codex/config-reference)
 - [CC Switch 官网](https://ccswitch.io)
 - [CC Switch GitHub Releases](https://github.com/farion1231/cc-switch/releases)
+- [Claude Code 中文安装工具](https://github.com/lxistired/claude-code-cn-installer)
