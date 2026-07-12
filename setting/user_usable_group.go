@@ -2,10 +2,25 @@ package setting
 
 import (
 	"encoding/json"
+	"strings"
 	"sync"
 
 	"github.com/QuantumNous/new-api/common"
 )
+
+var DefaultUserGroup = "default"
+
+func GetDefaultUserGroup() string {
+	group := strings.TrimSpace(DefaultUserGroup)
+	if group == "" {
+		return "default"
+	}
+	return group
+}
+
+func SetDefaultUserGroup(group string) {
+	DefaultUserGroup = strings.TrimSpace(group)
+}
 
 var userUsableGroups = map[string]string{
 	"default": "默认分组",

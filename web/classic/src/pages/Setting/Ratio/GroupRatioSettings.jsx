@@ -53,6 +53,7 @@ const { Text, Title, Paragraph } = Typography;
 const OPTION_KEYS = [
   'GroupRatio',
   'UserUsableGroups',
+  'DefaultUserGroup',
   'GroupGroupRatio',
   'group_ratio_setting.group_special_usable_group',
   'AutoGroups',
@@ -77,6 +78,7 @@ export default function GroupRatioSettings(props) {
   const [inputs, setInputs] = useState({
     GroupRatio: '',
     UserUsableGroups: '',
+    DefaultUserGroup: 'default',
     GroupGroupRatio: '',
     'group_ratio_setting.group_special_usable_group': '',
     AutoGroups: '',
@@ -190,6 +192,26 @@ export default function GroupRatioSettings(props) {
           userUsableGroups={inputs.UserUsableGroups}
           onChange={handleGroupTableChange}
         />
+        <Row gutter={16} style={{ marginTop: 16 }}>
+          <Col xs={24} sm={12} md={8} lg={8} xl={8}>
+            <Form.Select
+              label={t('新用户默认分组')}
+              field='DefaultUserGroup'
+              value={inputs.DefaultUserGroup}
+              optionList={groupNames.map((group) => ({
+                label: group,
+                value: group,
+              }))}
+              placeholder={t('选择新注册用户所属分组')}
+              onChange={(value) =>
+                setInputs((prev) => ({ ...prev, DefaultUserGroup: value }))
+              }
+              extraText={t(
+                '密码注册和 OAuth 注册的新用户都会自动加入该分组',
+              )}
+            />
+          </Col>
+        </Row>
       </Form.Section>
 
       <Form.Section text={t('自动分组')}>
@@ -267,6 +289,25 @@ export default function GroupRatioSettings(props) {
       style={{ marginBottom: 15 }}
     >
       <Form.Section text={t('分组JSON设置')}>
+        <Row gutter={16}>
+          <Col xs={24} sm={16}>
+            <Form.Select
+              label={t('新用户默认分组')}
+              field='DefaultUserGroup'
+              optionList={groupNames.map((group) => ({
+                label: group,
+                value: group,
+              }))}
+              placeholder={t('选择新注册用户所属分组')}
+              onChange={(value) =>
+                setInputs((prev) => ({ ...prev, DefaultUserGroup: value }))
+              }
+              extraText={t(
+                '密码注册和 OAuth 注册的新用户都会自动加入该分组',
+              )}
+            />
+          </Col>
+        </Row>
         <Row gutter={16}>
           <Col xs={24} sm={16}>
             <Form.TextArea
