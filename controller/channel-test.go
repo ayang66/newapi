@@ -41,10 +41,19 @@ type testResult struct {
 	newAPIError *types.NewAPIError
 }
 
+func isImageGenerationTestModel(modelName string) bool {
+	normalized := strings.ToLower(strings.TrimSpace(modelName))
+	return strings.HasPrefix(normalized, "gpt-image-") ||
+		strings.HasPrefix(normalized, "dall-e-")
+}
+
 func normalizeChannelTestEndpoint(channel *model.Channel, modelName, endpointType string) string {
 	normalized := strings.TrimSpace(endpointType)
 	if normalized != "" {
 		return normalized
+	}
+	if isImageGenerationTestModel(modelName) {
+		return string(constant.EndpointTypeImageGeneration)
 	}
 	if strings.HasSuffix(modelName, ratio_setting.CompactModelSuffix) {
 		return string(constant.EndpointTypeOpenAIResponseCompact)

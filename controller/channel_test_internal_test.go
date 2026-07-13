@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/QuantumNous/new-api/common"
+	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/dto"
 	"github.com/QuantumNous/new-api/model"
 	"github.com/QuantumNous/new-api/pkg/billingexpr"
@@ -15,6 +16,35 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
+
+func TestNormalizeChannelTestEndpointDetectsImageModels(t *testing.T) {
+	for _, modelName := range []string{"gpt-image-2", "gpt-image-1.5", "DALL-E-3"} {
+		t.Run(modelName, func(t *testing.T) {
+			endpoint := normalizeChannelTestEndpoint(nil, modelName, "")
+			require.Equal(t, string(constant.EndpointTypeImageGeneration), endpoint)
+
+			request := buildTestRequest(modelName, endpoint, nil, false)
+			imageRequest, ok := request.(*dto.ImageRequest)
+			require.True(t, ok)
+			require.Equal(t, modelName, imageRequest.Model)
+			require.Equal(t, "1024x1024", imageRequest.Size)
+		})
+	}
+}
+
+func TestNormalizeChannelTestEndpointPreservesExplicitSelection(t *testing.T) {
+	endpoint := normalizeChannelTestEndpoint(
+		nil,
+		"gpt-image-2",
+		string(constant.EndpointTypeOpenAIResponse),
+	)
+
+	require.Equal(t, string(constant.EndpointTypeOpenAIResponse), endpoint)
+}
+
+func TestNormalizeChannelTestEndpointLeavesTextModelsAutomatic(t *testing.T) {
+	require.Empty(t, normalizeChannelTestEndpoint(nil, "gpt-5.5", ""))
+}
 
 func TestSettleTestQuotaUsesTieredBilling(t *testing.T) {
 	info := &relaycommon.RelayInfo{
