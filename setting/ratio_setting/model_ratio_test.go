@@ -11,13 +11,13 @@ func TestGPT56CompletionRatio(t *testing.T) {
 
 	for _, model := range models {
 		ratio := GetCompletionRatio(model)
-		if ratio != 1 {
-			t.Fatalf("GetCompletionRatio(%q) = %v, want 1", model, ratio)
+		if ratio != 6 {
+			t.Fatalf("GetCompletionRatio(%q) = %v, want 6", model, ratio)
 		}
 
 		info := GetCompletionRatioInfo(model)
-		if info.Ratio != 1 || !info.Locked {
-			t.Fatalf("GetCompletionRatioInfo(%q) = %+v, want ratio 1 and locked", model, info)
+		if info.Ratio != 6 || !info.Locked {
+			t.Fatalf("GetCompletionRatioInfo(%q) = %+v, want ratio 6 and locked", model, info)
 		}
 	}
 }
